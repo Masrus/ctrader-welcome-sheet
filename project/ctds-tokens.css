@@ -1,0 +1,197 @@
+/* cTrader Design System — colors & typography tokens
+ * Derived from Figma "☀️ DS cTrader Summer 2025"
+ * Semantic palettes: lightSemanticPalette / darkSemanticPalette
+ */
+
+/* ── Fonts ─────────────────────────────────────────────────────── */
+/* SF Pro is the canonical product font. Since Apple doesn't license
+ * SF Pro as a webfont, we use it as-is on iOS / macOS (where it's
+ * the system font, accessed via `-apple-system` / "SF Pro Display"),
+ * and fall back to Inter (Roboto on Android) on every other platform.
+ * The cascade below picks the right one automatically. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&family=Geist:wght@400;500;700&family=Geist+Mono:wght@400;600&display=swap');
+
+:root {
+  /* ── Base font stacks ─────────────────────────────────────── */
+  /* Order matters: -apple-system / BlinkMacSystemFont resolve to the
+   * real SF Pro on Apple OSes, "SF Pro …" names cover any explicit
+   * install, then Roboto (Android system) and Inter (everywhere else). */
+  --ctds-font-sf:        -apple-system, BlinkMacSystemFont,
+                         'SF Pro Text', 'SF Pro Display', 'SF Pro',
+                         'Roboto', 'Inter', system-ui, sans-serif;
+  --ctds-font-display:   -apple-system, BlinkMacSystemFont,
+                         'SF Pro Display', 'SF Pro',
+                         'Inter Tight', 'Inter', 'Roboto', sans-serif;
+  --ctds-font-doc:       'Manrope', 'Inter', system-ui, sans-serif;  /* used in docs/guide pages */
+  --ctds-font-mono:      ui-monospace, 'SF Mono', 'Geist Mono', 'Menlo', monospace;
+  --ctds-font-numeric:   'Geist', 'Inter', 'Roboto', system-ui, sans-serif;    /* tabular numerals in charts */
+
+  /* ── Weights ──────────────────────────────────────────────── */
+  --ctds-weight-regular:  400;
+  --ctds-weight-medium:   500;
+  --ctds-weight-semibold: 600;
+  --ctds-weight-bold:     700;
+
+  /* ── Core brand colors (raw) ──────────────────────────────── */
+  --ctds-brand-orange:    #F05824;   /* primary brand red-orange */
+  --ctds-brand-orange-active: #E45422;
+  --ctds-brand-orange-light:  #F37950;
+  --ctds-brand-green:     #009345;   /* positive / buy */
+  --ctds-brand-green-dark:#00A64B;   /* dark-theme positive */
+  --ctds-brand-green-active: #008C42;
+  --ctds-brand-green-light:  #33A96A;
+  --ctds-brand-yellow:    #FEF8E7;   /* primary accent tint */
+  --ctds-brand-blue:      #4681D4;   /* links / interactive accent */
+  --ctds-brand-purple:    #9747FF;   /* annotation / callout only */
+
+  --ctds-warning:    #F4C836;
+  --ctds-attention:  #F27C0D;
+  --ctds-error:      #F44336;
+
+  /* ── Neutral scale ────────────────────────────────────────── */
+  --ctds-neutral-0:    #FFFFFF;
+  --ctds-neutral-50:   #F7F7F7;
+  --ctds-neutral-100:  #F2F2F2;
+  --ctds-neutral-150:  #EBEBEB;
+  --ctds-neutral-200:  #E0E0E1;
+  --ctds-neutral-300:  #D9D9D9;
+  --ctds-neutral-400:  #A4A4A7;
+  --ctds-neutral-500:  #8A8A8E;
+  --ctds-neutral-600:  #717175;
+  --ctds-neutral-700:  #5F5F63;
+  --ctds-neutral-800:  #3F3F41;
+  --ctds-neutral-850:  #2B2B2C;
+  --ctds-neutral-870:  #262627;
+  --ctds-neutral-900:  #191919;
+  --ctds-neutral-950:  #0E0E0E;
+  --ctds-neutral-1000: #000000;
+
+  /* ── Semantic — LIGHT (default) ───────────────────────────── */
+  --ctds-bg-primary:       #FFFFFF;
+  --ctds-bg-secondary:     #F7F7F7;
+  --ctds-bg-stroke:        rgba(0, 0, 0, 0.05);
+
+  --ctds-fg-primary:       #000000;
+  --ctds-fg-primary-disabled: #5F5F63;
+  --ctds-fg-secondary:     #8A8A8E;
+  --ctds-fg-secondary-disabled: #3C3C3C;
+  --ctds-fg-always-light:  #FFFFFF;
+  --ctds-fg-always-dark:   #000000;
+  --ctds-fg-inverted:      #FFFFFF;
+
+  --ctds-btn-primary:          #262627;
+  --ctds-btn-primary-active:   #3F3F41;
+  --ctds-btn-primary-disabled: #88888B;
+  --ctds-btn-secondary:        #F7F7F7;
+  --ctds-btn-secondary-active: #E0E0E1;
+  --ctds-btn-secondary-disabled: #EBEBEB;
+  --ctds-btn-tertiary:         #FFFFFF;
+  --ctds-btn-tertiary-active:  #F7F7F7;
+  --ctds-btn-inverted:         #F2F2F2;
+  --ctds-btn-inverted-active:  #DFDFDF;
+
+  --ctds-accent-primary:   #FEF8E7;
+  --ctds-positive:         #009345;
+  --ctds-positive-active:  #008C42;
+  --ctds-positive-light:   #33A96A;
+  --ctds-negative:         #F05824;
+  --ctds-negative-active:  #E45422;
+  --ctds-negative-light:   #F37950;
+
+  --ctds-overlay-normal:   rgba(0, 0, 0, 0.20);
+  --ctds-overlay-soft:     rgba(0, 0, 0, 0.05);
+
+  /* ── Radii & spacing (from component specs) ───────────────── */
+  --ctds-radius-xs:   8px;
+  --ctds-radius-s:    12px;
+  --ctds-radius-m:    16px;
+  --ctds-radius-l:    20px;  /* default button / input */
+  --ctds-radius-xl:   24px;  /* card / bottom-sheet */
+  --ctds-radius-pill: 999px; /* chips, segment */
+
+  --ctds-space-1:   4px;
+  --ctds-space-2:   8px;
+  --ctds-space-3:   12px;
+  --ctds-space-4:   16px;
+  --ctds-space-5:   20px;
+  --ctds-space-6:   24px;
+  --ctds-space-8:   32px;
+  --ctds-space-10:  40px;
+
+  /* ── Elevation ────────────────────────────────────────────── */
+  --ctds-shadow-card:   0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.06);
+  --ctds-shadow-sheet:  0 -4px 24px rgba(0,0,0,0.10);
+  --ctds-shadow-pop:    0 8px 32px rgba(0,0,0,0.12);
+
+  /* ── Typography scale (alias tokens) ──────────────────────── */
+  --ctds-title-primary-size:   36px;
+  --ctds-title-primary-lh:     44px;
+  --ctds-title-secondary-size: 28px;
+  --ctds-title-secondary-lh:   34px;
+
+  --ctds-subtitle-size:     24px;
+  --ctds-subtitle-lh:       30px;
+  --ctds-subtitle-2-size:   20px;
+  --ctds-subtitle-2-lh:     26px;
+  --ctds-subtitle-3-size:   18px;
+  --ctds-subtitle-3-lh:     24px;
+
+  --ctds-body-primary-size: 20px;
+  --ctds-body-primary-lh:   28px;
+  --ctds-body-size:         16px;       /* font base */
+  --ctds-body-lh:           20px;       /* line-height base */
+  --ctds-body-sm-size:      14px;
+  --ctds-body-sm-lh:        20px;
+
+  --ctds-desc-size:    12px;
+  --ctds-desc-lh:      16px;
+  --ctds-desc-xs-size: 11px;
+  --ctds-desc-xs-lh:   14px;
+}
+
+/* ── Semantic — DARK ──────────────────────────────────────────── */
+:root[data-theme="dark"],
+.ctds-dark {
+  --ctds-bg-primary:       #191919;
+  --ctds-bg-secondary:     #0E0E0E;
+  --ctds-bg-stroke:        rgba(184, 184, 184, 0.05);
+
+  --ctds-fg-primary:       #D9D9D9;
+  --ctds-fg-primary-disabled: #717175;
+  --ctds-fg-secondary:     #A4A4A7;
+  --ctds-fg-secondary-disabled: #78787D;
+  --ctds-fg-always-light:  #FFFFFF;
+  --ctds-fg-always-dark:   #000000;
+  --ctds-fg-inverted:      #2B2B2C;
+
+  --ctds-btn-primary:          #F2F2F2;
+  --ctds-btn-primary-active:   #DFDFDF;
+  --ctds-btn-primary-disabled: #8A8A8E;
+  --ctds-btn-secondary:        #0E0E0E;
+  --ctds-btn-secondary-active: #2B2B2C;
+  --ctds-btn-secondary-disabled: rgba(138, 138, 142, 0.10);
+  --ctds-btn-tertiary:         #1C1C1C;
+  --ctds-btn-tertiary-active:  #262626;
+  --ctds-btn-inverted:         #262627;
+  --ctds-btn-inverted-active:  #3F3F41;
+
+  --ctds-positive:         #00A64B;
+
+  --ctds-overlay-normal:   rgba(0, 0, 0, 0.56);
+  --ctds-overlay-soft:     rgba(0, 0, 0, 0.20);
+}
+
+/* ── Alias / utility classes ─────────────────────────────────── */
+html, body { font-family: var(--ctds-font-sf); color: var(--ctds-fg-primary); background: var(--ctds-bg-primary); }
+
+.ctds-title-1 { font-family: var(--ctds-font-sf); font-weight: 700; font-size: var(--ctds-title-primary-size); line-height: var(--ctds-title-primary-lh); letter-spacing: -0.01em; }
+.ctds-title-2 { font-family: var(--ctds-font-sf); font-weight: 700; font-size: var(--ctds-title-secondary-size); line-height: var(--ctds-title-secondary-lh); letter-spacing: -0.01em; }
+.ctds-subtitle { font-family: var(--ctds-font-sf); font-weight: 600; font-size: var(--ctds-subtitle-size); line-height: var(--ctds-subtitle-lh); }
+.ctds-subtitle-2 { font-family: var(--ctds-font-sf); font-weight: 600; font-size: var(--ctds-subtitle-2-size); line-height: var(--ctds-subtitle-2-lh); }
+.ctds-subtitle-3 { font-family: var(--ctds-font-sf); font-weight: 600; font-size: var(--ctds-subtitle-3-size); line-height: var(--ctds-subtitle-3-lh); }
+.ctds-body      { font-family: var(--ctds-font-sf); font-size: var(--ctds-body-size); line-height: var(--ctds-body-lh); }
+.ctds-body-lg   { font-family: var(--ctds-font-sf); font-size: var(--ctds-body-primary-size); line-height: var(--ctds-body-primary-lh); }
+.ctds-body-sm   { font-family: var(--ctds-font-sf); font-size: var(--ctds-body-sm-size); line-height: var(--ctds-body-sm-lh); }
+.ctds-desc      { font-family: var(--ctds-font-sf); font-size: var(--ctds-desc-size); line-height: var(--ctds-desc-lh); color: var(--ctds-fg-secondary); }
+.ctds-mono      { font-family: var(--ctds-font-mono); }
+.ctds-numeric   { font-family: var(--ctds-font-numeric); font-variant-numeric: tabular-nums; }
