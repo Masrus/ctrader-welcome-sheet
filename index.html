@@ -11,17 +11,10 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       height: 100%;
-      background: #EFEFEF;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Inter", system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
-    #root {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 40px 20px;
-    }
+    #root { min-height: 100vh; }
   </style>
 </head>
 <body>
@@ -40,6 +33,7 @@
         bg: '#FFFFFF',
         bgPage: '#F2F2F2',
         bgSheet: '#FFFFFF',
+        bgIllu: '#FAFAFA',
         fg: '#000000',
         fgSec: '#5F5F63',
         fgMuted: '#8A8A8E',
@@ -56,6 +50,7 @@
         bg: '#0E0E0E',
         bgPage: '#000000',
         bgSheet: '#191919',
+        bgIllu: '#141414',
         fg: '#FFFFFF',
         fgSec: '#A4A4A7',
         fgMuted: '#717175',
@@ -260,17 +255,12 @@
 
       return (
         <div style={{
-          background: t.bgSheet,
-          borderRadius: '24px 24px 0 0',
-          boxShadow: '0 -4px 24px rgba(0,0,0,0.10)',
-          overflow: 'hidden',
           color: t.fg,
           paddingBottom: 28,
         }}>
           {/* ── Illustration zone ── */}
           <div style={{
-            background: '#FAFAFA',
-            borderRadius: '24px 24px 0 0',
+            background: t.bgIllu,
             paddingBottom: 24,
             display: 'flex',
             flexDirection: 'column',
@@ -338,191 +328,11 @@
       );
     }
 
-    // ── iOS status bar ────────────────────────────────────────────────────────
-    function IOSStatusBar({ dark }) {
-      const c = dark ? '#fff' : '#000';
-      return (
-        <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '18px 28px 8px', width: '100%',
-        }}>
-          <span style={{ fontFamily: SF, fontWeight: 600, fontSize: 17, color: c }}>
-            9:41
-          </span>
-          <div style={{ display: 'flex', gap: 7, alignItems: 'center' }}>
-            {/* Signal bars */}
-            <svg width="19" height="12" viewBox="0 0 19 12">
-              <rect x="0"    y="7.5" width="3.2" height="4.5"  rx="0.7" fill={c} />
-              <rect x="4.8"  y="5"   width="3.2" height="7"    rx="0.7" fill={c} />
-              <rect x="9.6"  y="2.5" width="3.2" height="9.5"  rx="0.7" fill={c} />
-              <rect x="14.4" y="0"   width="3.2" height="12"   rx="0.7" fill={c} />
-            </svg>
-            {/* WiFi */}
-            <svg width="17" height="12" viewBox="0 0 17 12">
-              <circle cx="8.5" cy="10.5" r="1.5" fill={c} />
-              <path d="M5 8.2C5.9 7.3 7.1 6.8 8.5 6.8C9.9 6.8 11.1 7.3 12 8.2"
-                stroke={c} strokeWidth="1.5" fill="none" strokeLinecap="round" />
-              <path d="M2.5 5.5C4.1 4 6.2 3.2 8.5 3.2C10.8 3.2 12.9 4 14.5 5.5"
-                stroke={c} strokeWidth="1.5" fill="none" strokeLinecap="round" />
-              <path d="M0 2.8C2.3 0.8 5.2 -0.2 8.5 -0.2C11.8 -0.2 14.7 0.8 17 2.8"
-                stroke={c} strokeWidth="1.5" fill="none" strokeLinecap="round" />
-            </svg>
-            {/* Battery */}
-            <svg width="27" height="13" viewBox="0 0 27 13">
-              <rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke={c} strokeOpacity="0.35" fill="none" />
-              <rect x="2" y="2" width="20" height="9" rx="2" fill={c} />
-              <path d="M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z"
-                fill={c} fillOpacity="0.4" />
-            </svg>
-          </div>
-        </div>
-      );
-    }
-
-    // ── App backdrop (faded watchlist) ────────────────────────────────────────
-    function BackdropWatchlist({ t }) {
-      const rows = [
-        ['EURUSD', '1.0824', '+0.12%', true],
-        ['GBPUSD', '1.2647', '−0.08%', false],
-        ['USDJPY', '149.82', '+0.34%', true],
-        ['XAUUSD', '2384.5', '+0.21%', true],
-        ['BTCUSD', '68 412', '−1.42%', false],
-      ];
-      return (
-        <div style={{ padding: '8px 16px 0', color: t.fg, fontFamily: SF, opacity: 0.5 }}>
-          <div style={{
-            fontSize: 28, fontWeight: 700, letterSpacing: '-0.01em',
-            padding: '6px 0 14px',
-          }}>
-            Watchlist
-          </div>
-          {rows.map(([sym, price, chg, up], i) => (
-            <div key={i} style={{
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              padding: '13px 0', borderBottom: `1px solid ${t.stroke}`,
-            }}>
-              <div>
-                <div style={{ fontSize: 16, fontWeight: 600 }}>{sym}</div>
-                <div style={{ fontSize: 12, color: t.fgMuted, marginTop: 2 }}>Forex</div>
-              </div>
-              <div style={{ fontFamily: 'Geist, Inter, system-ui', fontVariantNumeric: 'tabular-nums', fontSize: 15, color: t.fgSec }}>
-                {price}
-              </div>
-              <div style={{
-                fontSize: 13, fontWeight: 600, padding: '4px 8px', borderRadius: 8,
-                color: up ? t.green : t.orange,
-                minWidth: 64, textAlign: 'right',
-              }}>
-                {chg}
-              </div>
-            </div>
-          ))}
-        </div>
-      );
-    }
-
-    // ── Phone frame ───────────────────────────────────────────────────────────
-    function PhoneFrame({ theme, children }) {
-      const t = TOKENS[theme] ?? TOKENS.light;
-      const dark = theme === 'dark';
-      return (
-        <div style={{
-          position: 'relative',
-          width: 393, height: 852,
-          borderRadius: 56,
-          overflow: 'hidden',
-          background: t.bgPage,
-          boxShadow: '0 30px 60px -20px rgba(0,0,0,0.25), 0 10px 30px -10px rgba(0,0,0,0.15)',
-          border: `8px solid ${dark ? '#1a1a1a' : '#0a0a0a'}`,
-          fontFamily: SF,
-          flexShrink: 0,
-        }}>
-          {/* Status bar */}
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
-            <IOSStatusBar dark={dark} />
-          </div>
-
-          {/* Watchlist backdrop */}
-          <div style={{ position: 'absolute', inset: 0, background: t.bgPage, paddingTop: 56 }}>
-            <BackdropWatchlist t={t} />
-          </div>
-
-          {/* Dim overlay */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            background: dark ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.25)',
-          }} />
-
-          {/* Bottom sheet */}
-          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 20 }}>
-            {children}
-          </div>
-
-          {/* Home indicator */}
-          <div style={{
-            position: 'absolute', left: '50%', bottom: 8,
-            transform: 'translateX(-50%)',
-            width: 134, height: 5, borderRadius: 3,
-            background: dark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.4)',
-            zIndex: 30,
-          }} />
-        </div>
-      );
-    }
-
-    // ── Toolbar ───────────────────────────────────────────────────────────────
-    function Toolbar({ theme, setTheme, onRestart }) {
-      return (
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          {['light', 'dark'].map(th => (
-            <button
-              key={th}
-              onClick={() => setTheme(th)}
-              style={{
-                padding: '7px 18px',
-                borderRadius: 20,
-                border: 'none',
-                background: theme === th ? '#262627' : '#fff',
-                color: theme === th ? '#fff' : 'rgba(0,0,0,0.5)',
-                fontSize: 13, fontWeight: 500,
-                cursor: 'pointer',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                transition: 'background 150ms ease, color 150ms ease',
-                fontFamily: SF,
-              }}
-            >
-              {th === 'light' ? '☀ Light' : '☽ Dark'}
-            </button>
-          ))}
-          <div style={{ width: 1, height: 18, background: 'rgba(0,0,0,0.15)' }} />
-          <button
-            onClick={onRestart}
-            style={{
-              padding: '7px 18px',
-              borderRadius: 20,
-              border: 'none',
-              background: '#fff',
-              color: 'rgba(0,0,0,0.5)',
-              fontSize: 13, fontWeight: 500,
-              cursor: 'pointer',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-              fontFamily: SF,
-            }}
-          >
-            ↺ Restart
-          </button>
-        </div>
-      );
-    }
-
     // ── Completed state ───────────────────────────────────────────────────────
-    function CompletedSheet({ t, onRestart }) {
+    function CompletedSheet({ t }) {
       return (
         <div style={{
-          background: t.bgSheet,
-          borderRadius: '24px 24px 0 0',
-          boxShadow: '0 -4px 24px rgba(0,0,0,0.10)',
-          padding: '32px 24px 48px',
+          padding: '48px 24px 48px',
           textAlign: 'center',
           color: t.fg,
         }}>
@@ -553,6 +363,7 @@
       const [sheetKey, setSheetKey] = React.useState(0);
 
       const t = TOKENS[theme];
+      const dark = theme === 'dark';
 
       const restart = () => {
         setDone(false);
@@ -562,38 +373,73 @@
       return (
         <div style={{
           minHeight: '100vh',
-          background: '#EFEFEF',
+          background: t.bgPage,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '40px 20px',
-          gap: 28,
+          justifyContent: 'flex-end',
           fontFamily: SF,
+          transition: 'background 200ms ease',
         }}>
-          <Toolbar theme={theme} setTheme={setTheme} onRestart={restart} />
-
-          <PhoneFrame theme={theme}>
-            {done
-              ? <CompletedSheet t={t} onRestart={restart} />
-              : (
-                <WelcomeSheet
-                  key={sheetKey}
-                  t={t}
-                  steps={STEPS}
-                  density="spacious"
-                  onComplete={() => setDone(true)}
-                />
-              )
-            }
-          </PhoneFrame>
-
+          {/* Theme toggle — top right */}
           <div style={{
-            fontFamily: SF, fontSize: 12,
-            color: 'rgba(0,0,0,0.4)',
-            textAlign: 'center', lineHeight: '18px',
+            position: 'fixed', top: 16, right: 16,
+            display: 'flex', gap: 6, zIndex: 100,
           }}>
-            Welcome bottom sheet · cTrader · 3-step onboarding after update
+            <button
+              onClick={() => setTheme(dark ? 'light' : 'dark')}
+              style={{
+                padding: '8px 16px',
+                borderRadius: 20,
+                border: 'none',
+                background: dark ? '#2a2a2a' : '#fff',
+                color: dark ? '#fff' : '#000',
+                fontSize: 13, fontWeight: 500,
+                cursor: 'pointer',
+                boxShadow: dark ? '0 1px 4px rgba(0,0,0,0.4)' : '0 1px 4px rgba(0,0,0,0.12)',
+                transition: 'background 200ms ease, color 200ms ease',
+                fontFamily: SF,
+              }}
+            >
+              {dark ? '☀ Light' : '☽ Dark'}
+            </button>
+            <button
+              onClick={restart}
+              style={{
+                padding: '8px 14px',
+                borderRadius: 20,
+                border: 'none',
+                background: dark ? '#2a2a2a' : '#fff',
+                color: dark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)',
+                fontSize: 13, fontWeight: 500,
+                cursor: 'pointer',
+                boxShadow: dark ? '0 1px 4px rgba(0,0,0,0.4)' : '0 1px 4px rgba(0,0,0,0.12)',
+                fontFamily: SF,
+              }}
+            >
+              ↺
+            </button>
+          </div>
+
+          {/* Sheet */}
+          <div style={{ width: '100%', maxWidth: 480, margin: '0 auto' }}>
+            <div style={{
+              background: t.bgSheet,
+              borderRadius: '24px 24px 0 0',
+              overflow: 'hidden',
+            }}>
+              {done
+                ? <CompletedSheet t={t} />
+                : (
+                  <WelcomeSheet
+                    key={sheetKey}
+                    t={t}
+                    steps={STEPS}
+                    density="spacious"
+                    onComplete={() => setDone(true)}
+                  />
+                )
+              }
+            </div>
           </div>
         </div>
       );
