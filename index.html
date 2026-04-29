@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Welcome Sheet — cTrader</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      background: #EFEFEF;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Inter", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    #root {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const SF = '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", system-ui, sans-serif';
+
+    // ── Design tokens ──────────────────────────────────────────────────────────
+    const TOKENS = {
+      light: {
+        bg: '#FFFFFF',
+        bgPage: '#F2F2F2',
+        bgSheet: '#FFFFFF',
+        fg: '#000000',
+        fgSec: '#5F5F63',
+        fgMuted: '#8A8A8E',
+        stroke: 'rgba(0,0,0,0.05)',
+        btnBg: '#262627',
+        btnFg: '#FFFFFF',
+        btnBgActive: '#3F3F41',
+        handle: 'rgba(0,0,0,0.15)',
+        orange: '#F05824',
+        green: '#009345',
+        blue: '#4681D4',
+      },
+      dark: {
+        bg: '#0E0E0E',
+        bgPage: '#000000',
+        bgSheet: '#191919',
+        fg: '#FFFFFF',
+        fgSec: '#A4A4A7',
+        fgMuted: '#717175',
+        stroke: 'rgba(184,184,184,0.07)',
+        btnBg: '#F2F2F2',
+        btnFg: '#000000',
+        btnBgActive: '#DFDFDF',
+        handle: 'rgba(255,255,255,0.2)',
+        orange: '#F05824',
+        green: '#00A64B',
+        blue: '#4681D4',
+      },
+    };
+
+    // ── 3-step onboarding content ──────────────────────────────────────────────
+    const STEPS = [
+      {
+        illu: 'candles',
+        title: 'Trade faster from charts',
+        body: 'Open charts from the bottom bar, place trades in one tap, and manage positions with less friction.',
+      },
+      {
+        illu: 'layers',
+        title: 'Everything in one place',
+        body: 'Accounts, deposits, withdrawals, bonuses, and transaction history are now organised in the new My cTrader hub.',
+      },
+      {
+        illu: 'rocket',
+        title: 'More ways to trade',
+        body: 'Access Copy Trading, Algo, Plugins, and Invite faster — plus customise the app your way.',
+      },
+    ];
+
+    // ── Illustrations ──────────────────────────────────────────────────────────
+    function IlluCandles({ t }) {
+      const candles = [
+        [38, 64, 132, t.green],
+        [72, 79, 124, t.green],
+        [106, 54, 114, t.orange],
+        [140, 44, 98, t.green],
+        [174, 68, 104, t.orange],
+        [208, 33, 84, t.green],
+      ];
+      return (
+        <svg viewBox="0 0 280 190" style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
+          {/* Baseline */}
+          <line x1="22" y1="152" x2="258" y2="152" stroke={t.fgMuted} strokeWidth="1" strokeDasharray="3 4" opacity="0.5" />
+          {/* Candles */}
+          {candles.map(([x, top, bot, c], i) => (
+            <g key={i}>
+              <line x1={x + 9} y1={top - 11} x2={x + 9} y2={bot + 11} stroke={c} strokeWidth="2" />
+              <rect x={x} y={top} width="18" height={bot - top} rx="3" fill={c} />
+            </g>
+          ))}
+          {/* Trend line */}
+          <path d="M 28 144 Q 140 118 252 50" stroke={t.fg} strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          <circle cx="252" cy="50" r="7" fill={t.fg} />
+        </svg>
+      );
+    }
+
+    function IlluLayers({ t }) {
+      return (
+        <svg viewBox="0 0 280 190" style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
+          {/* Three stacked cards */}
+          <rect x="40" y="22" width="200" height="46" rx="12" fill={t.bgSheet} stroke={t.stroke} strokeWidth="1.5" />
+          <rect x="20" y="74" width="240" height="46" rx="12" fill={t.bgSheet} stroke={t.stroke} strokeWidth="1.5" />
+          {/* Bottom card is highlighted */}
+          <rect x="60" y="126" width="160" height="46" rx="12" fill={t.fg} />
+          {/* Top card content */}
+          <circle cx="67" cy="45" r="5" fill={t.orange} />
+          <rect x="81" y="41" width="72" height="9" rx="4.5" fill={t.fgMuted} opacity="0.4" />
+          <rect x="172" y="39" width="48" height="13" rx="6.5" fill={t.green} opacity="0.2" />
+          {/* Middle card content */}
+          <circle cx="47" cy="97" r="5" fill={t.green} />
+          <rect x="61" y="93" width="88" height="9" rx="4.5" fill={t.fgMuted} opacity="0.4" />
+          <rect x="168" y="91" width="52" height="13" rx="6.5" fill={t.orange} opacity="0.2" />
+          {/* Bottom card content (inverted) */}
+          <rect x="76" y="143" width="68" height="9" rx="4.5" fill="rgba(255,255,255,0.6)" />
+          <rect x="156" y="141" width="44" height="13" rx="6.5" fill="rgba(255,255,255,0.25)" />
+        </svg>
+      );
+    }
+
+    function IlluRocket({ t }) {
+      return (
+        <svg viewBox="0 0 280 190" style={{ width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
+          {/* Y-axis ticks */}
+          {[20, 48, 76, 104, 132, 160].map((y, i) => (
+            <line key={i} x1="18" y1={y} x2="36" y2={y} stroke={t.fgMuted} strokeWidth="1" opacity="0.4" />
+          ))}
+          {/* Chart line */}
+          <polyline
+            points="36,168 72,150 108,157 148,122 188,108 232,56"
+            fill="none" stroke={t.fg} strokeWidth="3.5"
+            strokeLinecap="round" strokeLinejoin="round"
+          />
+          {/* Peak dot + glow */}
+          <circle cx="232" cy="56" r="16" fill={t.orange} opacity="0.18" />
+          <circle cx="232" cy="56" r="8" fill={t.orange} />
+          {/* Badge */}
+          <rect x="162" y="20" width="78" height="26" rx="13" fill={t.fg} />
+          <text
+            x="201" y="37"
+            fontSize="13" fontWeight="700"
+            fill={t.bg}
+            textAnchor="middle"
+            fontFamily={SF}
+          >+12.4%</text>
+        </svg>
+      );
+    }
+
+    const ILLUS = { candles: IlluCandles, layers: IlluLayers, rocket: IlluRocket };
+
+    // ── Stepper dots ───────────────────────────────────────────────────────────
+    function PageDots({ t, count, active }) {
+      return (
+        <div style={{ display: 'flex', gap: 6, justifyContent: 'center', alignItems: 'center' }}>
+          {Array.from({ length: count }).map((_, i) => (
+            <div
+              key={i}
+              style={{
+                width: i === active ? 20 : 6,
+                height: 6,
+                borderRadius: 999,
+                background: i === active ? t.fg : t.fgMuted,
+                opacity: i === active ? 1 : 0.4,
+                transition: 'width 250ms cubic-bezier(.4,0,.2,1), background 250ms ease, opacity 250ms ease',
+              }}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    // ── Primary button ────────────────────────────────────────────────────────
+    function PrimaryButton({ t, label, onClick, density }) {
+      const padY = density === 'spacious' ? 22 : density === 'compact' ? 14 : 18;
+      const [pressed, setPressed] = React.useState(false);
+      return (
+        <button
+          onClick={onClick}
+          onMouseDown={() => setPressed(true)}
+          onMouseUp={() => setPressed(false)}
+          onMouseLeave={() => setPressed(false)}
+          onTouchStart={() => setPressed(true)}
+          onTouchEnd={() => setPressed(false)}
+          style={{
+            width: '100%',
+            padding: `${padY}px 24px`,
+            borderRadius: 20,
+            background: pressed ? t.btnBgActive : t.btnBg,
+            color: t.btnFg,
+            border: 0,
+            fontFamily: SF,
+            fontSize: 16,
+            fontWeight: 500,
+            letterSpacing: '-0.2px',
+            cursor: 'pointer',
+            transition: 'background 120ms ease',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          {label}
+        </button>
+      );
+    }
+
+    // ── WelcomeSheet ──────────────────────────────────────────────────────────
+    function WelcomeSheet({ t, steps, density = 'spacious', onComplete }) {
+      const [step, setStep] = React.useState(0);
+      const [contentVisible, setContentVisible] = React.useState(true);
+      const busyRef = React.useRef(false);
+
+      const isLast = step === steps.length - 1;
+      const current = steps[step];
+      const Illu = ILLUS[current.illu];
+
+      const advance = () => {
+        if (busyRef.current) return;
+        busyRef.current = true;
+
+        setContentVisible(false);
+        setTimeout(() => {
+          if (isLast) {
+            onComplete?.();
+            busyRef.current = false;
+          } else {
+            setStep(s => s + 1);
+            setContentVisible(true);
+            busyRef.current = false;
+          }
+        }, 190);
+      };
+
+      const fade = {
+        opacity: contentVisible ? 1 : 0,
+        transform: contentVisible ? 'translateY(0)' : 'translateY(5px)',
+        transition: 'opacity 190ms ease, transform 190ms ease',
+      };
+
+      return (
+        <div style={{
+          background: t.bgSheet,
+          borderRadius: '24px 24px 0 0',
+          boxShadow: '0 -4px 24px rgba(0,0,0,0.10)',
+          overflow: 'hidden',
+          color: t.fg,
+          paddingBottom: 28,
+        }}>
+          {/* ── Illustration zone ── */}
+          <div style={{
+            background: '#FAFAFA',
+            borderRadius: '24px 24px 0 0',
+            paddingBottom: 24,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+            {/* Handle bar */}
+            <div style={{
+              width: 36, height: 4, borderRadius: 2,
+              background: t.handle, marginTop: 12,
+            }} />
+            {/* Illustration */}
+            <div style={{
+              marginTop: 24,
+              width: '100%',
+              padding: '0 24px',
+              height: 178,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              ...fade,
+            }}>
+              {Illu && <Illu t={t} />}
+            </div>
+          </div>
+
+          {/* ── Text content ── */}
+          <div style={{ padding: '24px 24px 0', ...fade }}>
+            <h2 style={{
+              margin: 0,
+              fontFamily: SF,
+              fontSize: 26,
+              lineHeight: '32px',
+              fontWeight: 700,
+              letterSpacing: '-0.01em',
+              color: t.fg,
+            }}>
+              {current.title}
+            </h2>
+            <p style={{
+              margin: '10px 0 0',
+              fontFamily: SF,
+              fontSize: 15,
+              lineHeight: '22px',
+              color: t.fgSec,
+            }}>
+              {current.body}
+            </p>
+          </div>
+
+          {/* ── Stepper ── */}
+          <div style={{ padding: '24px 20px 0' }}>
+            <PageDots t={t} count={steps.length} active={step} />
+          </div>
+
+          {/* ── Button ── */}
+          <div style={{ padding: '20px 20px 0' }}>
+            <PrimaryButton
+              t={t}
+              label={isLast ? 'Get started' : 'Next'}
+              onClick={advance}
+              density={density}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    // ── iOS status bar ────────────────────────────────────────────────────────
+    function IOSStatusBar({ dark }) {
+      const c = dark ? '#fff' : '#000';
+      return (
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '18px 28px 8px', width: '100%',
+        }}>
+          <span style={{ fontFamily: SF, fontWeight: 600, fontSize: 17, color: c }}>
+            9:41
+          </span>
+          <div style={{ display: 'flex', gap: 7, alignItems: 'center' }}>
+            {/* Signal bars */}
+            <svg width="19" height="12" viewBox="0 0 19 12">
+              <rect x="0"    y="7.5" width="3.2" height="4.5"  rx="0.7" fill={c} />
+              <rect x="4.8"  y="5"   width="3.2" height="7"    rx="0.7" fill={c} />
+              <rect x="9.6"  y="2.5" width="3.2" height="9.5"  rx="0.7" fill={c} />
+              <rect x="14.4" y="0"   width="3.2" height="12"   rx="0.7" fill={c} />
+            </svg>
+            {/* WiFi */}
+            <svg width="17" height="12" viewBox="0 0 17 12">
+              <circle cx="8.5" cy="10.5" r="1.5" fill={c} />
+              <path d="M5 8.2C5.9 7.3 7.1 6.8 8.5 6.8C9.9 6.8 11.1 7.3 12 8.2"
+                stroke={c} strokeWidth="1.5" fill="none" strokeLinecap="round" />
+              <path d="M2.5 5.5C4.1 4 6.2 3.2 8.5 3.2C10.8 3.2 12.9 4 14.5 5.5"
+                stroke={c} strokeWidth="1.5" fill="none" strokeLinecap="round" />
+              <path d="M0 2.8C2.3 0.8 5.2 -0.2 8.5 -0.2C11.8 -0.2 14.7 0.8 17 2.8"
+                stroke={c} strokeWidth="1.5" fill="none" strokeLinecap="round" />
+            </svg>
+            {/* Battery */}
+            <svg width="27" height="13" viewBox="0 0 27 13">
+              <rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke={c} strokeOpacity="0.35" fill="none" />
+              <rect x="2" y="2" width="20" height="9" rx="2" fill={c} />
+              <path d="M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z"
+                fill={c} fillOpacity="0.4" />
+            </svg>
+          </div>
+        </div>
+      );
+    }
+
+    // ── App backdrop (faded watchlist) ────────────────────────────────────────
+    function BackdropWatchlist({ t }) {
+      const rows = [
+        ['EURUSD', '1.0824', '+0.12%', true],
+        ['GBPUSD', '1.2647', '−0.08%', false],
+        ['USDJPY', '149.82', '+0.34%', true],
+        ['XAUUSD', '2384.5', '+0.21%', true],
+        ['BTCUSD', '68 412', '−1.42%', false],
+      ];
+      return (
+        <div style={{ padding: '8px 16px 0', color: t.fg, fontFamily: SF, opacity: 0.5 }}>
+          <div style={{
+            fontSize: 28, fontWeight: 700, letterSpacing: '-0.01em',
+            padding: '6px 0 14px',
+          }}>
+            Watchlist
+          </div>
+          {rows.map(([sym, price, chg, up], i) => (
+            <div key={i} style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '13px 0', borderBottom: `1px solid ${t.stroke}`,
+            }}>
+              <div>
+                <div style={{ fontSize: 16, fontWeight: 600 }}>{sym}</div>
+                <div style={{ fontSize: 12, color: t.fgMuted, marginTop: 2 }}>Forex</div>
+              </div>
+              <div style={{ fontFamily: 'Geist, Inter, system-ui', fontVariantNumeric: 'tabular-nums', fontSize: 15, color: t.fgSec }}>
+                {price}
+              </div>
+              <div style={{
+                fontSize: 13, fontWeight: 600, padding: '4px 8px', borderRadius: 8,
+                color: up ? t.green : t.orange,
+                minWidth: 64, textAlign: 'right',
+              }}>
+                {chg}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // ── Phone frame ───────────────────────────────────────────────────────────
+    function PhoneFrame({ theme, children }) {
+      const t = TOKENS[theme] ?? TOKENS.light;
+      const dark = theme === 'dark';
+      return (
+        <div style={{
+          position: 'relative',
+          width: 393, height: 852,
+          borderRadius: 56,
+          overflow: 'hidden',
+          background: t.bgPage,
+          boxShadow: '0 30px 60px -20px rgba(0,0,0,0.25), 0 10px 30px -10px rgba(0,0,0,0.15)',
+          border: `8px solid ${dark ? '#1a1a1a' : '#0a0a0a'}`,
+          fontFamily: SF,
+          flexShrink: 0,
+        }}>
+          {/* Status bar */}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+            <IOSStatusBar dark={dark} />
+          </div>
+
+          {/* Watchlist backdrop */}
+          <div style={{ position: 'absolute', inset: 0, background: t.bgPage, paddingTop: 56 }}>
+            <BackdropWatchlist t={t} />
+          </div>
+
+          {/* Dim overlay */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: dark ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0.25)',
+          }} />
+
+          {/* Bottom sheet */}
+          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 20 }}>
+            {children}
+          </div>
+
+          {/* Home indicator */}
+          <div style={{
+            position: 'absolute', left: '50%', bottom: 8,
+            transform: 'translateX(-50%)',
+            width: 134, height: 5, borderRadius: 3,
+            background: dark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.4)',
+            zIndex: 30,
+          }} />
+        </div>
+      );
+    }
+
+    // ── Toolbar ───────────────────────────────────────────────────────────────
+    function Toolbar({ theme, setTheme, onRestart }) {
+      return (
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {['light', 'dark'].map(th => (
+            <button
+              key={th}
+              onClick={() => setTheme(th)}
+              style={{
+                padding: '7px 18px',
+                borderRadius: 20,
+                border: 'none',
+                background: theme === th ? '#262627' : '#fff',
+                color: theme === th ? '#fff' : 'rgba(0,0,0,0.5)',
+                fontSize: 13, fontWeight: 500,
+                cursor: 'pointer',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                transition: 'background 150ms ease, color 150ms ease',
+                fontFamily: SF,
+              }}
+            >
+              {th === 'light' ? '☀ Light' : '☽ Dark'}
+            </button>
+          ))}
+          <div style={{ width: 1, height: 18, background: 'rgba(0,0,0,0.15)' }} />
+          <button
+            onClick={onRestart}
+            style={{
+              padding: '7px 18px',
+              borderRadius: 20,
+              border: 'none',
+              background: '#fff',
+              color: 'rgba(0,0,0,0.5)',
+              fontSize: 13, fontWeight: 500,
+              cursor: 'pointer',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+              fontFamily: SF,
+            }}
+          >
+            ↺ Restart
+          </button>
+        </div>
+      );
+    }
+
+    // ── Completed state ───────────────────────────────────────────────────────
+    function CompletedSheet({ t, onRestart }) {
+      return (
+        <div style={{
+          background: t.bgSheet,
+          borderRadius: '24px 24px 0 0',
+          boxShadow: '0 -4px 24px rgba(0,0,0,0.10)',
+          padding: '32px 24px 48px',
+          textAlign: 'center',
+          color: t.fg,
+        }}>
+          <div style={{
+            width: 56, height: 56, borderRadius: 999,
+            background: '#009345',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            margin: '0 auto 16px',
+          }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12l5 5L19 7" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <div style={{ fontFamily: SF, fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em' }}>
+            You're all set
+          </div>
+          <div style={{ fontFamily: SF, fontSize: 14, color: t.fgSec, marginTop: 8, lineHeight: '20px' }}>
+            Start exploring the new features.
+          </div>
+        </div>
+      );
+    }
+
+    // ── App ───────────────────────────────────────────────────────────────────
+    function App() {
+      const [theme, setTheme] = React.useState('light');
+      const [done, setDone] = React.useState(false);
+      const [sheetKey, setSheetKey] = React.useState(0);
+
+      const t = TOKENS[theme];
+
+      const restart = () => {
+        setDone(false);
+        setSheetKey(k => k + 1);
+      };
+
+      return (
+        <div style={{
+          minHeight: '100vh',
+          background: '#EFEFEF',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '40px 20px',
+          gap: 28,
+          fontFamily: SF,
+        }}>
+          <Toolbar theme={theme} setTheme={setTheme} onRestart={restart} />
+
+          <PhoneFrame theme={theme}>
+            {done
+              ? <CompletedSheet t={t} onRestart={restart} />
+              : (
+                <WelcomeSheet
+                  key={sheetKey}
+                  t={t}
+                  steps={STEPS}
+                  density="spacious"
+                  onComplete={() => setDone(true)}
+                />
+              )
+            }
+          </PhoneFrame>
+
+          <div style={{
+            fontFamily: SF, fontSize: 12,
+            color: 'rgba(0,0,0,0.4)',
+            textAlign: 'center', lineHeight: '18px',
+          }}>
+            Welcome bottom sheet · cTrader · 3-step onboarding after update
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
